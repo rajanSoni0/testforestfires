@@ -1,153 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FWI Prediction</title>
 
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #5A48FF, #00C6FF);
-            font-family: "Poppins", Arial, sans-serif;
+            background-color: #eef2f7;
         }
-
-        .container {
-            width: 360px;
-            background: rgba(255, 255, 255, 0.12);
-            padding: 28px;
+        .card {
             border-radius: 18px;
-            box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.25);
-            backdrop-filter: blur(12px);
-            color: #fff;
         }
-
-        /* SMALLER, ELEGANT HEADING */
-        h1 {
-            text-align: center;
-            margin-bottom: 18px;
-            font-size: 20px;
-            /* smaller size */
-            font-weight: 500;
-            /* lighter */
-            letter-spacing: 0.5px;
-            opacity: 0.9;
+        input, select {
+            height: 48px;
+            font-size: 1rem;
         }
-
-        label {
-            font-size: 13px;
-            display: block;
-            margin-top: 10px;
-            font-weight: 500;
-        }
-
-        input[type="text"],
-        select {
-            width: 100%;
-            padding: 11px 14px;
-            margin-top: 5px;
-            border-radius: 10px;
-            border: none;
-            font-size: 14px;
-            outline: none;
-            background: rgba(255, 255, 255, 0.35);
-            color: #fff;
-        }
-
-        input::placeholder {
-            color: #efefef;
-        }
-
-        option {
-            color: #000;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 18px;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
+        .form-label {
             font-weight: 600;
-            background: white;
-            color: #4A44FF;
-            cursor: pointer;
-            transition: 0.25s;
+            margin-top: 10px;
         }
-
-        button:hover {
-            background: #f0f0f0;
-            transform: translateY(-3px);
+        .title {
+            font-size: 1.8rem;
+            font-weight: 700;
         }
-
-        /* PREDICTION RESULT STYLING */
-        h2 {
-            text-align: center;
-            margin-top: 22px;
-            font-size: 18px;
-            background: rgba(255, 255, 255, 0.25);
-            padding: 10px;
-            border-radius: 10px;
-            backdrop-filter: blur(8px);
+        .predict-btn {
+            height: 52px;
+            font-size: 1.2rem;
+            font-weight: 600;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
-        <h1>FWI Prediction</h1> <!-- NOW SMALL & ELEGANT -->
+<div class="container py-5">
+    <div class="card shadow-lg p-5 mx-auto" style="max-width: 650px;">
+        
+        <h2 class="text-center mb-4 title">Forest Fire Weather Index (FWI) Prediction</h2>
 
-        <form action="{{ url_for('predict_datapoint') }}" method="post">
+        <form action="/predict" method="POST">
 
-            <label>Temperature (°C)</label>
-            <input type="text" name="Temperature" placeholder="Enter temperature" required>
+            <!-- Temperature -->
+            <label class="form-label">Temperature</label>
+            <input type="number" step="0.01" name="Temperature" class="form-control" required>
 
-            <label>Relative Humidity (RH %)</label>
-            <input type="text" name="RH" placeholder="Enter humidity" required>
+            <!-- Relative Humidity -->
+            <label class="form-label">Relative Humidity (RH)</label>
+            <input type="number" step="0.01" name="RH" class="form-control" required>
 
-            <label>Wind Speed (km/h)</label>
-            <input type="text" name="Ws" placeholder="Enter wind speed" required>
+            <!-- Wind Speed -->
+            <label class="form-label">Wind Speed (Ws)</label>
+            <input type="number" step="0.01" name="Ws" class="form-control" required>
 
-            <label>Rain (mm)</label>
-            <input type="text" name="Rain" placeholder="Rainfall amount" required>
+            <!-- Rain -->
+            <label class="form-label">Rain</label>
+            <input type="number" step="0.01" name="Rain" class="form-control" required>
 
-            <label>Fine Fuel Moisture Code (FFMC)</label>
-            <input type="text" name="FFMC" placeholder="FFMC value" required>
+            <!-- FFMC -->
+            <label class="form-label">Fine Fuel Moisture Code (FFMC)</label>
+            <input type="number" step="0.01" name="FFMC" class="form-control" required>
 
-            <label>Duff Moisture Code (DMC)</label>
-            <input type="text" name="DMC" placeholder="DMC value" required>
+            <!-- DMC -->
+            <label class="form-label">Duff Moisture Code (DMC)</label>
+            <input type="number" step="0.01" name="DMC" class="form-control" required>
 
-            <label>Initial Spread Index (ISI)</label>
-            <input type="text" name="ISI" placeholder="ISI value" required>
+            <!-- ISI -->
+            <label class="form-label">Initial Spread Index (ISI)</label>
+            <input type="number" step="0.01" name="ISI" class="form-control" required>
 
-            <label>Fire Class</label>
-            <select name="Classes" required>
+            <!-- Classes -->
+            <label class="form-label">Fire Classes</label>
+            <select class="form-control" name="Classes" required>
                 <option value="0">No Fire (0)</option>
                 <option value="1">Fire (1)</option>
             </select>
 
-            <label>Region</label>
-            <select name="Region" required>
+            <!-- Region -->
+            <label class="form-label">Region</label>
+            <select class="form-control" name="Region" required>
                 <option value="0">Bejaia (0)</option>
                 <option value="1">Sidi Bel-Abbes (1)</option>
             </select>
 
-            <button type="submit">Predict</button>
+            <button type="submit" class="btn btn-primary w-100 mt-4 predict-btn">Predict</button>
         </form>
-        {% if result %}
-        <h2>FWI: {{ result }}</h2>
+
+        <!-- Prediction Output -->
+        {% if result is not none %}
+        <div class="alert alert-info mt-4 text-center p-4" style="font-size: 1.4rem; border-radius: 12px;">
+            <strong>FWI Prediction:</strong> {{ result }}
+        </div>
         {% endif %}
 
     </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
-
 </html>
