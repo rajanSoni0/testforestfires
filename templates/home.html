@@ -1,32 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>FWI Prediction</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #5A48FF, #00C6FF);
+            font-family: "Poppins", Arial, sans-serif;
+        }
+
+        .container {
+            width: 360px;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 28px;
+            border-radius: 18px;
+            box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(12px);
+            color: #fff;
+        }
+
+        /* SMALLER, ELEGANT HEADING */
+        h1 {
+            text-align: center;
+            margin-bottom: 18px;
+            font-size: 20px;
+            /* smaller size */
+            font-weight: 500;
+            /* lighter */
+            letter-spacing: 0.5px;
+            opacity: 0.9;
+        }
+
+        label {
+            font-size: 13px;
+            display: block;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 11px 14px;
+            margin-top: 5px;
+            border-radius: 10px;
+            border: none;
+            font-size: 14px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.35);
+            color: #fff;
+        }
+
+        input::placeholder {
+            color: #efefef;
+        }
+
+        option {
+            color: #000;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 18px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            background: white;
+            color: #4A44FF;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        button:hover {
+            background: #f0f0f0;
+            transform: translateY(-3px);
+        }
+
+        /* PREDICTION RESULT STYLING */
+        h2 {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 18px;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 10px;
+            border-radius: 10px;
+            backdrop-filter: blur(8px);
+        }
+    </style>
 </head>
 
 <body>
-    <div class="login">
-        <h1>FWI Prediction</h1>
-        <!-- Main Input For Receiving Query to our ML -->
+
+    <div class="container">
+        <h1>FWI Prediction</h1> <!-- NOW SMALL & ELEGANT -->
+
         <form action="{{ url_for('predict_datapoint') }}" method="post">
-            <input type="text" name="Temperature" placeholder="Temperature" required="required" /><br>
-            <input type="text" name="RH" placeholder="RH" required="required" /><br>
-            <input type="text" name="Ws" placeholder="Ws" required="required" /><br>
-            <input type="text" name="Rain" placeholder="Rain" required="required" /><br>
-            <input type="text" name="FFMC" placeholder="FFMC" required="required" /><br>
-            <input type="text" name="DMC" placeholder="DMC" required="required" /><br>
-            <input type="text" name="ISI" placeholder="ISI" required="required" /><br>
-            <input type="text" name="Classes" placeholder="Classes" required="required" /><br>
-            <input type="text" name="Region" placeholder="Region" required="required" /><br>
-            <button type="submit" class="btn btn-primary btn-block btn-large">
-                Predict
-            </button>
+
+            <label>Temperature (°C)</label>
+            <input type="text" name="Temperature" placeholder="Enter temperature" required>
+
+            <label>Relative Humidity (RH %)</label>
+            <input type="text" name="RH" placeholder="Enter humidity" required>
+
+            <label>Wind Speed (km/h)</label>
+            <input type="text" name="Ws" placeholder="Enter wind speed" required>
+
+            <label>Rain (mm)</label>
+            <input type="text" name="Rain" placeholder="Rainfall amount" required>
+
+            <label>Fine Fuel Moisture Code (FFMC)</label>
+            <input type="text" name="FFMC" placeholder="FFMC value" required>
+
+            <label>Duff Moisture Code (DMC)</label>
+            <input type="text" name="DMC" placeholder="DMC value" required>
+
+            <label>Initial Spread Index (ISI)</label>
+            <input type="text" name="ISI" placeholder="ISI value" required>
+
+            <label>Fire Class</label>
+            <select name="Classes" required>
+                <option value="0">No Fire (0)</option>
+                <option value="1">Fire (1)</option>
+            </select>
+
+            <label>Region</label>
+            <select name="Region" required>
+                <option value="0">Bejaia (0)</option>
+                <option value="1">Sidi Bel-Abbes (1)</option>
+            </select>
+
+            <button type="submit">Predict</button>
         </form>
-        <h2>
-            The FWI prediction is {{result}}
-        </h2>   
+        {% if result %}
+        <h2>FWI: {{ result }}</h2>
+        {% endif %}
+
     </div>
 
 </body>
