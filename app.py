@@ -2,8 +2,7 @@ from flask import Flask, request, render_template, redirect, url_for
 import pickle
 import numpy as np
 
-application = Flask(__name__)
-app = application
+app = Flask(__name__)
 
 ridge_model = pickle.load(open('models/ridge.pkl', 'rb'))
 standard_scaler = pickle.load(open('models/scaler.pkl', 'rb'))
